@@ -1,27 +1,31 @@
-﻿namespace HospitalManagement
+﻿using System;
+
+namespace HospitalManagement
 {
     class Patient : Person
     {
-        private string Name { get; set; }
-        private int age { get; set; }
-        public override void AddDetails()
+        // Additional properties specific to patients
+        public string MedicalCondition { get; set; }
+        public decimal BillAmount { get; set; }
+
+        // Constructor to initialize patient details
+        public Patient(int id, string name, int age, string contactNumber, string condition, decimal billAmount)
+            : base(id, name, age, contactNumber)
         {
-            throw new NotImplementedException();
+            MedicalCondition = condition;
+            BillAmount = billAmount;
         }
 
-        public override void DeleteDetails()
+        // Overriding DisplayDetails from Person class
+        public override void DisplayDetails()
         {
-            throw new NotImplementedException();
-        }
-
-        public override void GetDetails()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void UpdateDetails()
-        {
-            throw new NotImplementedException();
+            Console.WriteLine("------ Patient Details ------");
+            Console.WriteLine($"ID: {Id}");
+            Console.WriteLine($"Name: {Name}");
+            Console.WriteLine($"Age: {Age}");
+            Console.WriteLine($"Contact: {ContactNumber}");
+            Console.WriteLine($"Medical Condition: {MedicalCondition}");
+            Console.WriteLine($"Bill Amount: {BillAmount}");
         }
     }
 }

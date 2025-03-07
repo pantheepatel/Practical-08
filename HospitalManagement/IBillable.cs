@@ -1,6 +1,0 @@
-﻿namespace HospitalManagement
-{
-    interface IBillable
-    {
-    }
-}

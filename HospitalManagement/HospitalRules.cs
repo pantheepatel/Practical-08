@@ -2,27 +2,31 @@
 {
     sealed class HospitalRules
     {
-        // consultation fee  
-        public const decimal CONSULTATION_FEE = 500.00m;
-
-        // billing rules  
-        public static readonly Dictionary<string, decimal> ServiceCharges = new(){
-            { "General Checkup", 300.00m },
-            { "Emergency", 1500.00m },
-            { "Surgery", 50000.00m },
-            { "ICU Admission", 10000.00m }
-        };
-
-        // checking age
-        public static bool ValidatePatientAge(int age)
+        
+        // validating age
+        public static bool IsValidAge(int age)
         {
             return age >= 0 && age <= 120;
         }
-
-        // returning the charge according to service choosen
-        public static decimal GetServiceCharge(string serviceName)
+        // validating phone number
+        public static bool IsValidContactNumber(string contactNumber)
         {
-            return ServiceCharges.ContainsKey(serviceName) ? ServiceCharges[serviceName] : 0m;
+            if (string.IsNullOrEmpty(contactNumber))
+            {
+                return false;
+            }
+
+            if (contactNumber.Length != 10)
+            {
+                return false;
+            }
+
+            if (!contactNumber.All(char.IsDigit))
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 
