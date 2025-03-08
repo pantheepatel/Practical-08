@@ -1,24 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using static HospitalManagement.ExceptionHandler;
 
 namespace HospitalManagement
 {
-    class PatientService : ExceptionHandler,IPatientCRUD
+    class PatientService : IPatientCRUD
     {
         private List<Patient> patients = new List<Patient>();
 
         // Add a new patient
         public void AddPatient(Patient patient)
         {
-            if (patient == null)
+            try
             {
-                throw new InvalidPatientException("Invalid patient data.");
+                if (patient == null)
+                {
+                    throw new InvalidPatientException("Details can not be null");
+                }
+                if (!HospitalRules.IsValidAge(patient.Age))
+                {
+                    throw new InvalidPatientException("Invalid age. Age must be between 0 and 120.");
+                }
+                if (!HospitalRules.IsValidContactNumber(patient.ContactNumber))
+                {
+                    throw new InvalidPatientException("Invalid contact number. It must be 10 digits.");
+                }
+                patients.Add(patient);
+                Console.WriteLine($"Patient {patient.Name} added successfully.");
             }
-
-            patients.Add(patient);
-            Console.WriteLine($"Patient {patient.Name} added successfully.");
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error: {e.Message}");
+            }
         }
+
+
 
         // List all patients
         public void ListPatients()
@@ -46,6 +60,18 @@ namespace HospitalManagement
                 return;
             }
 
+            if (age.HasValue && !HospitalRules.IsValidAge(age.Value))
+            {
+                Console.WriteLine("Invalid age. Age must be between 0 and 120.");
+                return;
+            }
+
+            if (!string.IsNullOrEmpty(contactNumber) && !HospitalRules.IsValidContactNumber(contactNumber))
+            {
+                Console.WriteLine("Invalid contact number. It must be 10 digits.");
+                return;
+            }
+
             if (!string.IsNullOrEmpty(name)) patient.Name = name;
             if (age.HasValue) patient.Age = age.Value;
             if (!string.IsNullOrEmpty(contactNumber)) patient.ContactNumber = contactNumber;
@@ -66,7 +92,7 @@ namespace HospitalManagement
             }
 
             Console.WriteLine($"\nBilling Details for {patient.Name}:");
-            Console.WriteLine($"Total Bill: {patient.BillAmount:C}");
+            Console.WriteLine($"Total Bill: {patient.BillAmount}");
         }
     }
 }
